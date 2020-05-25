@@ -1,0 +1,28 @@
+Create a budgeting and spend monitoring application that: 
+* allows user to see financial transactions
+** individual transactions
+** summaries by category: total, percent of all spending
+** overall summaries: income vs expenses
+* categorizes transactions
+** automatically by rules
+** manually for remaining
+** groups 'transfers': amounts that cancel each other out 
+*** user must confirm or split if no rule specifying decision
+** supports 'contains' matching
+** manual resolution for unmatched
+
+
+
+Use cases and commands:
+* user adds rules: (regex, category) pairs
+** > spemo addrule <matcher> <category>
+* user imports csv files
+** > spemo import <filepath>
+* user categorizes uncategorized transactions
+** > spemo group
+* user views summaries by category over last month
+** > spemo report <month>
+* user views summaries by year
+** > spemo report <year>
+** user views summaries over time range
+** > spemo report <startDate> <endDate>
