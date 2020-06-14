@@ -20,6 +20,11 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             return Task.FromResult(result);
         }
 
+        public Task Add(Transaction transaction)
+        {
+            return Add(new List<Transaction>{ transaction });
+        }
+
         public Task Add(IEnumerable<Transaction> transactions)
         {
             _transactions.AddRange(transactions);

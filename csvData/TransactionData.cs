@@ -35,6 +35,11 @@ namespace Coomes.SpendingReports.CsvData
             return Task.FromResult((ICollection<Transaction>)domainModels);
         }
 
+        public Task Add(Transaction transaction)
+        {
+            return Add(new List<Transaction> {transaction});
+        }
+
         public Task Add(IEnumerable<Transaction> transactions)
         {
             EnsureInitialized();
