@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csvData", "csvData\csvData.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integrationTest", "test\integrationTest\integrationTest.csproj", "{98CFB354-43E6-4D22-B79B-E08D265BC25B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "consoleApp", "consoleApp\consoleApp.csproj", "{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +90,18 @@ Global
 		{98CFB354-43E6-4D22-B79B-E08D265BC25B}.Release|x64.Build.0 = Release|Any CPU
 		{98CFB354-43E6-4D22-B79B-E08D265BC25B}.Release|x86.ActiveCfg = Release|Any CPU
 		{98CFB354-43E6-4D22-B79B-E08D265BC25B}.Release|x86.Build.0 = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|x64.Build.0 = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E4F8E02E-7F46-41AA-B99C-FC9A143A383D} = {53F434DA-1940-404C-972B-6242AD7EC254}

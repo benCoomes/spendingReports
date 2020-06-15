@@ -19,7 +19,7 @@
     <ProjectReference Include="..\..\csvData\csvData.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+  <ItemGroup>
     <None Update="testData\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
