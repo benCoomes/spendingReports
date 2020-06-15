@@ -19,7 +19,8 @@ namespace Coomes.SpendingReports.WellsFargoAdapter
                 csvReader.Configuration.HasHeaderRecord = false;
                 return csvReader
                     .GetRecords<WellsFargoCSVTransaction>()
-                    .Select(wft => wft.ToDomainModel());
+                    .Select(wft => wft.ToDomainModel())
+                    .ToList();
             }
         }
     }
