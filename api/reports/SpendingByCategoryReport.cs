@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using Coomes.SpendingReports.Api.Transactions;
 
@@ -7,6 +8,7 @@ namespace Coomes.SpendingReports.Api.Reports
     {
         private ICollection<Transaction> _transactions;
         public IDictionary<string, double> Categories { get; private set; }
+        public double NetTotal {get => _transactions.Sum(t => t.Amount); }
 
         public SpendingByCategoryReport(ICollection<Transaction> transactions)
         {

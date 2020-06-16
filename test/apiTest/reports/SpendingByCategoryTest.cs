@@ -77,5 +77,27 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             // then
             report.Categories["Uncategorized"].Should().Be(49.50);
         }
+
+        [TestMethod]
+        public async Task SpendingByCategory_GeneratesNetTotal()
+        {
+            // given 
+            var testData = new TestTransactionData();
+            var expectedTransactions = new List<Transaction>
+            {
+                new Transaction { Amount = -100.00, Category = "Cat1", Description = "T1", Date = DateTime.Parse("01-01-2020") },
+                new Transaction { Amount = -50.50, Description = "Cat2", Date = DateTime.Parse("01-02-2020") },
+                new Transaction { Amount = 200.00, Category = "Cat3", Description = "T3", Date = DateTime.Parse("01-03-2020") }
+            };
+            await testData.Add(expectedTransactions);
+
+            var sut = new SpendingByCategory(testData);
+            
+            // when 
+            var report = await sut.Execute();
+
+            // then
+            report.NetTotal.Should().Be(49.50);
+        }
     }
 }
