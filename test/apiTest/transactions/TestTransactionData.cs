@@ -30,5 +30,23 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             _transactions.AddRange(transactions);
             return Task.CompletedTask;
         }
+
+        public async Task Update(IEnumerable<Transaction> updates)
+        {
+            foreach(var update in updates)
+            {
+                await Update(update);
+            }
+        }
+
+        public Task Update(Transaction update)
+        {
+            foreach(var existing in _transactions)
+            {
+                if(existing.IsSameAs(update))
+                    existing.Category = update.Category;
+            }
+            return Task.CompletedTask;
+        }
     }
 }

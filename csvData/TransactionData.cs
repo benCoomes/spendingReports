@@ -53,6 +53,50 @@ namespace Coomes.SpendingReports.CsvData
             return Task.CompletedTask;
         }
 
+        public Task Update(Transaction update)
+        {
+            EnsureInitialized();
+
+            if(InnerUpdate(update))
+            {
+                SaveToFile();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public Task Update(IEnumerable<Transaction> updates)
+        {
+            EnsureInitialized();
+
+            var madeChanges = false;
+            foreach(var update in updates)
+            {
+                madeChanges = InnerUpdate(update) || madeChanges;
+            }
+            if(madeChanges)
+            {
+                SaveToFile();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private bool InnerUpdate(Transaction update)
+        {
+            var madeChanges = false;
+            foreach(var existing in _transactions)
+            {
+                var domainExisting = existing.ToDomainModel();
+                if(domainExisting.IsSameAs(update))
+                {
+                    existing.Category = update.Category;
+                    madeChanges = true;
+                }
+            }
+            return madeChanges;
+        }
+
         private void EnsureInitialized()
         {
             if(_initialized) return; 
