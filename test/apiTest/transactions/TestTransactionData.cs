@@ -16,7 +16,7 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
 
         public Task<ICollection<Transaction>> GetAll() 
         {
-            ICollection<Transaction> result = _transactions.ToList();
+            ICollection<Transaction> result = _transactions.Select(t => DeepCopy(t)).ToList();
             return Task.FromResult(result);
         }
 
@@ -27,26 +27,20 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
 
         public Task Add(IEnumerable<Transaction> transactions)
         {
-            _transactions.AddRange(transactions);
+            var copied = transactions.Select(t => DeepCopy(t));
+            _transactions.AddRange(copied);
             return Task.CompletedTask;
         }
-
-        public async Task Update(IEnumerable<Transaction> updates)
+        
+        private Transaction DeepCopy(Transaction original)
         {
-            foreach(var update in updates)
+            return new Transaction
             {
-                await Update(update);
-            }
-        }
-
-        public Task Update(Transaction update)
-        {
-            foreach(var existing in _transactions)
-            {
-                if(existing.IsSameAs(update))
-                    existing.Category = update.Category;
-            }
-            return Task.CompletedTask;
+                Category = original.Category,
+                Amount = original.Amount,
+                Description = original.Description,
+                Date = original.Date
+            };
         }
     }
 }

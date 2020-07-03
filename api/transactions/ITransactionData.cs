@@ -8,7 +8,5 @@ namespace Coomes.SpendingReports.Api.Transactions
         Task<ICollection<Transaction>> GetAll();
         Task Add(Transaction transaction);
         Task Add(IEnumerable<Transaction> transactions);
-        Task Update(Transaction transaction);
-        Task Update(IEnumerable<Transaction> transactions);
     }
 }

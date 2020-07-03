@@ -45,28 +45,5 @@ namespace Coomes.SpendingReports.IntegrationTest
             // assert
             postAdd.Count.Should().Be(preAdd.Count + 1);
         }
-
-        [TestMethod]
-        public async Task Update_UpdatesCategories()
-        {
-            // arrange
-            InitialData.ResetStorage();
-            var sut = new TransactionData(InitialData.StoreLocation);
-            var originalTransactions = await sut.GetAll();
-            var updatedTransactions = originalTransactions.Select(ot => new Transaction
-            {
-                Date = ot.Date,
-                Amount = ot.Amount,
-                Description = ot.Description,
-                Category = "Updated Category" 
-            });
-
-            // act
-            await sut.Update(updatedTransactions);
-            var acutualTransactionsAfterUpdate = await sut.GetAll();
-
-            // assert
-            acutualTransactionsAfterUpdate.Should().BeEquivalentTo(updatedTransactions);
-        }
     }
 }

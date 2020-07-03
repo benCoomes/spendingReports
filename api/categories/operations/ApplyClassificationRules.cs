@@ -1,24 +1,19 @@
-using System;
+using System.Linq;
 using System.Threading.Tasks;    
 using System.Collections.Generic;
-using Coomes.SpendingReports.Api.Transactions.Operations;
+using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Categories.Operations 
 {
     public class ApplyClassificationRules 
     {
-        private GetTransactions _getTransactions;
-        private UpdateTransactions _updateTransactions;
-
-        public ApplyClassificationRules(GetTransactions getTransactions, UpdateTransactions updateTransactions)
+        public ICollection<Transaction> Execute(ICollection<Transaction> transactions)
         {
-            _getTransactions = getTransactions;
-            _updateTransactions = updateTransactions;
-        }
+            foreach(var trans in transactions)
+                if(string.IsNullOrWhiteSpace(trans.Category))
+                    trans.Category = "expected category";
 
-        public Task Execute() 
-        {
-            throw new NotImplementedException();
+            return transactions;
         }
     }
 }
