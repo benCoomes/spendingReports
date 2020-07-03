@@ -1,11 +1,8 @@
-using System;
-using System.Threading.Tasks;    
-using System.Collections.Generic;
 using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Categories 
 {
-    public interface Classifier
+    public interface IClassifier
     {
         void ApplyCategory(Transaction transaction);
     }

@@ -5,22 +5,22 @@ using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Categories 
 {
-    public class ContainsClassifier : Classifier
+    public class ContainsClassifier : IClassifier
     {
-        private readonly string _searchValue;
-        private readonly string _category;
+        public string SearchValue { get; private set; }
+        public string Category { get; private set; }
 
         public ContainsClassifier(string searchValue, string category)
         {
-            _searchValue = searchValue;
-            _category = category;
+            SearchValue = searchValue;
+            Category = category;
         }
 
         public void ApplyCategory(Transaction transaction)
         {
-            if(transaction.Description.Contains(_searchValue))
+            if(transaction.Description.Contains(SearchValue))
             {
-                transaction.Category = _category;
+                transaction.Category = Category;
             }
         }
     }
