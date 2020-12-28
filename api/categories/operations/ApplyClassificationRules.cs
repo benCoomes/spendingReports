@@ -10,7 +10,7 @@ namespace Coomes.SpendingReports.Api.Categories.Operations
         public ICollection<Transaction> Execute(ICollection<Transaction> transactions)
         {
             foreach(var trans in transactions)
-                if(string.IsNullOrWhiteSpace(trans.Category))
+                if(trans.Category == Constants.Uncategorized)
                     trans.Category = "expected category";
 
             return transactions;

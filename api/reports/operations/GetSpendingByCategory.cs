@@ -3,19 +3,19 @@ using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Reports.Operations
 {
-    public class SpendingByCategory
+    public class GetSpendingByCategory
     {
         private ITransactionData _transactions;
 
-        public SpendingByCategory(ITransactionData transactions)
+        public GetSpendingByCategory(ITransactionData transactions)
         {
             _transactions = transactions;
         }
 
-        public async Task<SpendingByCategoryReport> Execute()
+        public async Task<SpendingByCategories> Execute()
         {
             var transactions = await _transactions.GetAll();
-            return new SpendingByCategoryReport(transactions);
+            return new SpendingByCategories(transactions);
         }
     }
 }

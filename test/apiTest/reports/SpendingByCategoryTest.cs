@@ -24,13 +24,13 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             };
             await testData.Add(expectedTransactions);
 
-            var sut = new SpendingByCategory(testData);
+            var sut = new GetSpendingByCategory(testData);
             
             // when 
             var report = await sut.Execute();
 
             // then
-            report.Categories["Cat1"].Should().Be(49.50);
+            report.Categories["Cat1"].Net.Should().Be(49.50);
         }
 
         [TestMethod]
@@ -46,14 +46,14 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             };
             await testData.Add(expectedTransactions);
 
-            var sut = new SpendingByCategory(testData);
+            var sut = new GetSpendingByCategory(testData);
             
             // when 
             var report = await sut.Execute();
 
             // then
-            report.Categories["Cat1"].Should().Be(-150.50);
-            report.Categories["Cat2"].Should().Be(200);
+            report.Categories["Cat1"].Net.Should().Be(-150.50);
+            report.Categories["Cat2"].Net.Should().Be(200);
         }
 
         [TestMethod]
@@ -64,22 +64,22 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             var expectedTransactions = new List<Transaction>
             {
                 new Transaction { Amount = -100.00, Category = "\t\t   ", Description = "T1", Date = DateTime.Parse("01-01-2020") },
-                new Transaction { Amount = -50.50, Description = "T2", Date = DateTime.Parse("01-02-2020") },
+                new Transaction { Amount = -50.50, Category = null, Description = "T2", Date = DateTime.Parse("01-02-2020") },
                 new Transaction { Amount = 200.00, Category = "", Description = "T3", Date = DateTime.Parse("01-03-2020") }
             };
             await testData.Add(expectedTransactions);
 
-            var sut = new SpendingByCategory(testData);
+            var sut = new GetSpendingByCategory(testData);
             
             // when 
             var report = await sut.Execute();
 
             // then
-            report.Categories["Uncategorized"].Should().Be(49.50);
+            report.Categories[Constants.Uncategorized].Net.Should().Be(49.50);
         }
 
         [TestMethod]
-        public async Task SpendingByCategory_GeneratesNetTotal()
+        public async Task SpendingByCategory_GeneratesTotals()
         {
             // given 
             var testData = new TestTransactionData();
@@ -91,13 +91,15 @@ namespace Coomes.SpendingReports.ApiTest.Transactions
             };
             await testData.Add(expectedTransactions);
 
-            var sut = new SpendingByCategory(testData);
+            var sut = new GetSpendingByCategory(testData);
             
             // when 
             var report = await sut.Execute();
 
             // then
-            report.NetTotal.Should().Be(49.50);
+            report.Net.Should().Be(49.50);
+            report.Loss.Should().Be(-150.50);
+            report.Gain.Should().Be(200.00);
         }
     }
 }

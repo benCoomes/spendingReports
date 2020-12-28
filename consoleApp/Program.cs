@@ -68,7 +68,7 @@ namespace Coomes.SpendingReports.ConsoleApp
         static void Report(string[] args)
         {
             var storage = new TransactionData(_settings.StorageLocation);
-            var operation = new SpendingByCategory(storage);
+            var operation = new GetSpendingByCategory(storage);
             var report = operation.Execute().GetAwaiter().GetResult();
 
             Display("");
@@ -76,12 +76,14 @@ namespace Coomes.SpendingReports.ConsoleApp
             Display("");
             Display("Category".PadRight(20) + "\tAmount");
             Display("=======================================");
-            foreach((string category, double amount) in report.Categories)
+            foreach(var category in report.Categories.Values)
             {
-                Display(category.PadRight(20) + "\t" + amount.ToString("C"));
+                Display(category.Name.PadRight(20) + "\t" + category.Net.ToString("C"));
             }
             Display("=======================================");
-            Display($"Total: {report.NetTotal}");
+            Display($"Gain: " + report.Gain.ToString("C"));
+            Display($"Loss: " + report.Loss.ToString("C"));
+            Display($"Net:  " + report.Net.ToString("C"));
             Display("");
         }
 
