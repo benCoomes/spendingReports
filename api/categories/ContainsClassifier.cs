@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;    
-using System.Collections.Generic;
 using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Categories 
@@ -16,12 +13,14 @@ namespace Coomes.SpendingReports.Api.Categories
             Category = category;
         }
 
-        public void ApplyCategory(Transaction transaction)
+        public bool Apply(Transaction transaction)
         {
             if(transaction.Description.Contains(SearchValue))
             {
                 transaction.Category = Category;
+                return true;
             }
+            return false;
         }
     }
 }

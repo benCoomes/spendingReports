@@ -4,6 +4,6 @@ namespace Coomes.SpendingReports.Api.Categories
 {
     public interface IClassifier
     {
-        void ApplyCategory(Transaction transaction);
+        bool Apply(Transaction transaction);
     }
 }

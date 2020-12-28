@@ -23,8 +23,9 @@ namespace Coomes.SpendingReports.ApiTest.Categories
 
             var sut = new ContainsClassifier("description", "Expected Category");
 
-            sut.ApplyCategory(trans);
+            var didApply = sut.Apply(trans);
 
+            didApply.Should().BeTrue();
             trans.Category.Should().Be("Expected Category");
         }
 
@@ -42,8 +43,9 @@ namespace Coomes.SpendingReports.ApiTest.Categories
 
             var sut = new ContainsClassifier("foobar", "Unoriginal Category");
 
-            sut.ApplyCategory(trans);
+            var didApply = sut.Apply(trans);
 
+            didApply.Should().BeFalse();
             trans.Category.Should().Be(originalCategory);
         }
     }
