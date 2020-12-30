@@ -17,16 +17,14 @@ namespace Coomes.SpendingReports.ApiTest.Categories
         [TestMethod]
         public async Task ApplyClassificationRules_SetsTransactionCategories()
         {
-            var originalTransactions = new List<Transaction>
+            var transaction = new Transaction
             {
-                new Transaction
-                {
-                    Amount = -1,
-                    Description = "some transaction",
-                    Category = "original category",
-                    Date  = DateTime.Parse("2020-01-01")
-                }
+                Amount = -1,
+                Description = "some transaction",
+                Category = "original category",
+                Date  = DateTime.Parse("2020-01-01")
             };
+            var transactions = new List<Transaction> { transaction };
             
             var classifier = new ContainsClassifier("some transaction", "expected category");
             var classifierData = new Mock<IClassifierData>();
@@ -36,10 +34,9 @@ namespace Coomes.SpendingReports.ApiTest.Categories
 
             var sut = new ApplyClassificationRules(classifierData.Object);    
 
-            var updatedTransactions = await sut.Execute(originalTransactions);
+            await sut.Execute(transactions);
 
-            var updatedTransaction = updatedTransactions.Single();
-            updatedTransaction.Category.Should().Be("expected category");
+            transaction.Category.Should().Be("expected category");
         }
     }         
 }

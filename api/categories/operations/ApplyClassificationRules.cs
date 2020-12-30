@@ -12,7 +12,7 @@ namespace Coomes.SpendingReports.Api.Categories.Operations
             _classifierData = classifierData;
         }
 
-        public async Task<ICollection<Transaction>> Execute(ICollection<Transaction> transactions)
+        public async Task Execute(ICollection<Transaction> transactions)
         {
             var classifiers = await _classifierData.GetAll();
             
@@ -26,8 +26,6 @@ namespace Coomes.SpendingReports.Api.Categories.Operations
                         }
                 }
             }
-
-            return transactions;
         }
     }
 }
