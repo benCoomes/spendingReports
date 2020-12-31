@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Coomes.SpendingReports.Api.Transactions.Operations;
 using Coomes.SpendingReports.Api.Reports.Operations;
 using Coomes.SpendingReports.CsvData;
+using Coomes.SpendingReports.Api.Categories.Operations;
 
 namespace Coomes.SpendingReports.ConsoleApp
 {
@@ -16,7 +18,7 @@ namespace Coomes.SpendingReports.ConsoleApp
         {
             if(args.Length < 1)
             {
-                Display($"SpendingReports cannot be run without arguments. Try one of the supported commands: Import");
+                DisplayLine($"SpendingReports cannot be run without arguments. Try one of the supported commands: Import");
                 return;
             }
 
@@ -26,7 +28,7 @@ namespace Coomes.SpendingReports.ConsoleApp
             }
             catch(MissingConfigurationException ex)
             {
-                Display($"Required configurations are missing:\n\t" + ex.Message);
+                DisplayLine($"Required configurations are missing:\n\t" + ex.Message);
                 return;
             }
 
@@ -34,35 +36,42 @@ namespace Coomes.SpendingReports.ConsoleApp
             switch(command)
             {
                 case("import"):
-                    Import(args);
+                    RunImport(args);
                     break;
                 case("report"):
                     Report(args);
                     break;
                 default:
-                    Display($"The command '${command}' is not recognized. Please try of the supported commands: \nImport");
+                    DisplayLine($"The command '${command}' is not recognized. Please try of the supported commands: \nImport");
                     break;
             }
         }
 
-        static void Import(string[] args)
+        static void RunImport(string[] args)
         {
-            string filePath;
-            if(args.Length <2)
-            {
-                Console.WriteLine("Please specify the file to import: ");
-                filePath = Console.ReadLine();
-            }
-            else
-            {
-                filePath = args[1];
-            }
+            var filePath = GetImportFile();
+            var transactions = WellsFargoAdapter.WellsFargoCsv.GetTransactions(filePath).ToList();
 
-            var transactions = WellsFargoAdapter.WellsFargoCsv.GetTransactions(filePath);
-            var storage = new TransactionData(_settings.StorageLocation);
-            var operation = new ImportTransactions(storage);
+            var transactionData = new TransactionData(_settings.StorageLocation);
+            var importOperation = new ImportTransactions(transactionData);
 
-            operation.Execute(transactions).GetAwaiter().GetResult(); // todo - async?
+            var classifierData = new ClassifierData(_settings.StorageLocation);
+            var classifyOperation = new ApplyClassificationRules(classifierData);
+
+            Import.Run(transactions, importOperation, classifyOperation);
+
+            string GetImportFile() 
+            {
+                if(args.Length <2)
+                {
+                    DisplayLine("Please specify the file to import: ");
+                    return Console.ReadLine();
+                }
+                else
+                {
+                    return args[1];
+                }
+            }
         }
 
         static void Report(string[] args)
@@ -71,23 +80,24 @@ namespace Coomes.SpendingReports.ConsoleApp
             var operation = new GetSpendingByCategory(storage);
             var report = operation.Execute().GetAwaiter().GetResult();
 
-            Display("");
-            Display("            Spending Report:           ");
-            Display("");
-            Display("Category".PadRight(20) + "\tAmount");
-            Display("=======================================");
+            DisplayLine("");
+            DisplayLine("            Spending Report:           ");
+            DisplayLine("");
+            DisplayLine("Category".PadRight(20) + "\tAmount");
+            DisplayLine("=======================================");
             foreach(var category in report.Categories.Values)
             {
-                Display(category.Name.PadRight(20) + "\t" + category.Net.ToString("C"));
+                DisplayLine(category.Name.PadRight(20) + "\t" + category.Net.ToString("C"));
             }
-            Display("=======================================");
-            Display($"Gain: " + report.Gain.ToString("C"));
-            Display($"Loss: " + report.Loss.ToString("C"));
-            Display($"Net:  " + report.Net.ToString("C"));
-            Display("");
+            DisplayLine("=======================================");
+            DisplayLine($"Gain: " + report.Gain.ToString("C"));
+            DisplayLine($"Loss: " + report.Loss.ToString("C"));
+            DisplayLine($"Net:  " + report.Net.ToString("C"));
+            DisplayLine("");
         }
 
-        static void Display(string line) => Console.WriteLine(line);
+        static void DisplayLine(string line) => Console.WriteLine(line);
+        static void Display(string line) => Console.Write(line);
 
         static void InitConfiguration()
         {

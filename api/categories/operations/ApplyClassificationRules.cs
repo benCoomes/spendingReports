@@ -20,10 +20,10 @@ namespace Coomes.SpendingReports.Api.Categories.Operations
             {
                 foreach(var classifier in classifiers) 
                 {
-                        if(classifier.Apply(trans))
-                        {
-                            break;
-                        }
+                    if(classifier.Apply(trans))
+                    {
+                        break;
+                    }
                 }
             }
         }
