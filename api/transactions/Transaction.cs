@@ -1,4 +1,5 @@
 using System;
+using DTO = Coomes.SpendingReports.Dto;
 
 namespace Coomes.SpendingReports.Api.Transactions
 {
@@ -24,6 +25,17 @@ namespace Coomes.SpendingReports.Api.Transactions
             {
                 _category = value;
             } 
+        }
+
+        public DTO.Transaction ToDTO() 
+        {
+            return new DTO.Transaction
+            {
+                Date = this.Date,
+                Amount = this.Amount,
+                Description = this.Description,
+                Category = this.Category
+            };
         }
     }
 }
