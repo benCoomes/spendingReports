@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "integrationTest", "test\int
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "consoleApp", "consoleApp\consoleApp.csproj", "{55D4BFBD-ADA4-4E7B-A696-A213AE8394F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{800C2C4C-5255-43F1-963B-3BC9E8DAF69D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webApi", "webApi\webApi.csproj", "{800C2C4C-5255-43F1-963B-3BC9E8DAF69D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
