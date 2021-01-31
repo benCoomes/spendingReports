@@ -1,3 +1,19 @@
 <template>
-    <h4>${message}</h4>
+    <require from="./transaction-list.css"></require>
+
+    <h4>Transaction Summary</h4>
+    <table class="transaction-table">
+        <tr class="transaction-table__header">
+            <th class="transaction-table__cell">Date</th>
+            <th class="transaction-table__cell">Amount</th>
+            <th class="transaction-table__cell">Category</th>
+            <th class="transaction-table__cell">Description</th>
+        </tr>
+        <tr repeat.for="transaction of transactions" class="transaction-table__row">
+            <td class="transaction-table__cell">${transaction.date}</td>
+            <td class="transaction-table__cell">${transaction.amount}</td>
+            <td class="transaction-table__cell">${transaction.category}</td>
+            <td class="transaction-table__cell">${transaction.description}</td>
+        </tr>
+    </table>
 </template>
