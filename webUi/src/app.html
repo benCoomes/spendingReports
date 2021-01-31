@@ -1,3 +1,18 @@
 <template>
+  <require from="./app.css"></require>
+
   <h1>${title}</h1>
+
+  <nav role="navigation" class="nav-bar">
+    <a class="nav-bar__nav-item" href="/">
+      <span>Transactions</span>
+    </a>
+    <a class="nav-bar__nav-item" href="categories">
+      <span>Categories</span>
+    </a>
+  </nav>
+  
+  <div>
+    <router-view></router-view>
+  </div>
 </template>

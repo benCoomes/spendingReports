@@ -1,0 +1,12 @@
+.nav-bar {
+ margin-top: 5px;
+ margin-bottom: 5px;
+ padding-top: 5px;
+ padding-bottom: 5px;
+ background-color: rgb(240, 240, 240);
+ color: rgb(26, 15, 98);
+}
+
+.nav-bar__nav-item {
+    margin-right: 10px;
+}
