@@ -18,6 +18,8 @@ namespace Coomes.SpendingReports.Web
 {
     public class Startup
     {
+        private string AllowAnyOrigin = "allowAnyOrigin";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,6 +30,15 @@ namespace Coomes.SpendingReports.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // TODO: remove allow any CORS once web UI and API are run in the same container
+            services.AddCors(options => 
+            {
+                options.AddPolicy(name: AllowAnyOrigin, builder => 
+                {
+                    builder.AllowAnyOrigin();
+                });
+            });
+
             services.AddControllers();
 
             // operations
@@ -50,6 +61,8 @@ namespace Coomes.SpendingReports.Web
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(AllowAnyOrigin);
 
             app.UseAuthorization();
 
