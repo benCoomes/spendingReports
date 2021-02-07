@@ -4,6 +4,7 @@
     <ProjectReference Include="..\api\api.csproj" />
     <ProjectReference Include="..\dto\dto.csproj" />
     <ProjectReference Include="..\csvData\csvData.csproj" />
+    <ProjectReference Include="..\wellsFargoAdapter\wellsFargoAdapter.csproj"/>
   </ItemGroup>
 
   <PropertyGroup>

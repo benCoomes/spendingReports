@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +8,7 @@ namespace Coomes.SpendingReports.Api.Transactions.Operations
     {
         private ITransactionData _data;
 
-        public ImportTransactions(ITransactionData data) 
+        public ImportTransactions(ITransactionData data)
         {
             _data = data;
         }
@@ -16,6 +16,12 @@ namespace Coomes.SpendingReports.Api.Transactions.Operations
         public Task Execute(IEnumerable<Transaction> transactions)
         {
             return _data.Add(transactions);
+        }
+
+        public async Task Execute(Stream rawTransactionCsvStream, ITransactionReader reader)
+        {
+            var transactions = await reader.ReadAllAsync(rawTransactionCsvStream);
+            await Execute(transactions);
         }
     }
 }

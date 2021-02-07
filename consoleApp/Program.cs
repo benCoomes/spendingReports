@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Coomes.SpendingReports.Api.Transactions;
 using Coomes.SpendingReports.Api.Transactions.Operations;
 using Coomes.SpendingReports.Api.Reports.Operations;
 using Coomes.SpendingReports.CsvData;
@@ -50,8 +52,13 @@ namespace Coomes.SpendingReports.ConsoleApp
         static void RunImport(string[] args)
         {
             var filePath = GetImportFile();
-            var transactions = WellsFargoAdapter.WellsFargoCsv.GetTransactions(filePath).ToList();
-
+            var transactions = new List<Transaction>();
+            var adapter = new WellsFargoAdapter.WellsFargoCsvReader(); 
+            using(var stream = File.OpenRead(filePath))
+            {
+                transactions.AddRange(adapter.ReadAllAsync(stream).GetAwaiter().GetResult());
+            }
+            
             var transactionData = new TransactionData(_settings.StorageLocation);
             var importOperation = new ImportTransactions(transactionData);
 

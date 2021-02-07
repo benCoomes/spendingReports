@@ -1,0 +1,8 @@
+<template>
+    <h2>Import Transaction Files</h2>
+    <form submit.delegate="uploadFiles()">
+        <input id="files" name="transactionFiles" type="file" accept=".csv" files.bind="selectedFiles">
+        <input type="submit" value="Upload" if.bind="selectedFiles.length > 0">
+    </form>
+    <p>${errorMessage}</p>
+</template>

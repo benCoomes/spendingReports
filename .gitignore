@@ -6,6 +6,7 @@
 #Spending Reports files
 testData/*
 _consoleAppData/*
+webApi/appData/*
 
 
 # User-specific files

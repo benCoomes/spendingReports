@@ -30,7 +30,13 @@ export class App {
         route: 'categories',
         moduleId: PLATFORM.moduleName('categories/category-list'), 
         title: 'Categories', 
-        name: 'transactions-route'
+        name: 'categories-route'
+      },
+      {
+        route: 'import',
+        moduleId: PLATFORM.moduleName('import/import'),
+        title: 'Import',
+        name: 'import-route'
       }
     ]);
   }
