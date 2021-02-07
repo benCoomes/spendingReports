@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Coomes.SpendingReports.Api.Transactions.Operations;
 using Coomes.SpendingReports.Api.Transactions;
 using Coomes.SpendingReports.CsvData;
@@ -18,7 +11,7 @@ namespace Coomes.SpendingReports.Web
 {
     public class Startup
     {
-        private string AllowAnyOrigin = "allowAnyOrigin";
+        internal const string AllowAll = "allowAnyOrigin";
 
         public Startup(IConfiguration configuration)
         {
@@ -33,9 +26,11 @@ namespace Coomes.SpendingReports.Web
             // TODO: remove allow any CORS once web UI and API are run in the same container
             services.AddCors(options => 
             {
-                options.AddPolicy(name: AllowAnyOrigin, builder => 
+                options.AddPolicy(name: AllowAll, builder => 
                 {
                     builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
                 });
             });
 
@@ -62,7 +57,7 @@ namespace Coomes.SpendingReports.Web
 
             app.UseRouting();
 
-            app.UseCors(AllowAnyOrigin);
+            app.UseCors(AllowAll);
 
             app.UseAuthorization();
 
