@@ -19,12 +19,12 @@ namespace Coomes.SpendingReports.CsvData
             _storage = new CsvRepository<ClassifierDataModel>(storageDir, STORAGEFILE);
         }
 
-        public Task<ICollection<IClassifier>> GetAll()
+        public Task<ICollection<Classifier>> GetAll()
         {
             _storage.EnsureInitialized();
 
             var domainModels = _storage.Entities.Select(t => t.ToDomainModel()).ToList();
-            return Task.FromResult((ICollection<IClassifier>)domainModels);
+            return Task.FromResult((ICollection<Classifier>)domainModels);
         }
     }
 }

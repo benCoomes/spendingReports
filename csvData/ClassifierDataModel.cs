@@ -8,15 +8,15 @@ namespace Coomes.SpendingReports.CsvData
         public string Category { get; set; }
         public string SearchValue { get; set; }
 
-        public IClassifier ToDomainModel() 
+        public Classifier ToDomainModel() 
         {
-            return new ContainsClassifier(SearchValue, Category);
+            return new Classifier(SearchValue, Category);
         }
     }
 
     internal static class ClassifierExtensisons
     {
-        public static ClassifierDataModel ToDataModel(this ContainsClassifier domainModel)
+        public static ClassifierDataModel ToDataModel(this Classifier domainModel)
         {
             return new ClassifierDataModel
             {

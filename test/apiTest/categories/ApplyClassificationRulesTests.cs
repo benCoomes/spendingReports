@@ -21,16 +21,16 @@ namespace Coomes.SpendingReports.ApiTest.Categories
             {
                 Amount = -1,
                 Description = "some transaction",
-                Category = "original category",
+                Category = "",
                 Date  = DateTime.Parse("2020-01-01")
             };
             var transactions = new List<Transaction> { transaction };
             
-            var classifier = new ContainsClassifier("some transaction", "expected category");
+            var classifier = new Classifier("some transaction", "expected category");
             var classifierData = new Mock<IClassifierData>();
             classifierData
                 .Setup(cd => cd.GetAll())
-                .ReturnsAsync(new List<IClassifier> { classifier });
+                .ReturnsAsync(new List<Classifier> { classifier });
 
             var sut = new ApplyClassificationRules(classifierData.Object);    
 

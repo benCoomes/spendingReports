@@ -2,12 +2,12 @@ using Coomes.SpendingReports.Api.Transactions;
 
 namespace Coomes.SpendingReports.Api.Categories 
 {
-    public class ContainsClassifier : IClassifier
+    public class Classifier
     {
-        public string SearchValue { get; private set; }
         public string Category { get; private set; }
+        public string SearchValue { get; private set; }
 
-        public ContainsClassifier(string searchValue, string category)
+        public Classifier(string searchValue, string category)
         {
             SearchValue = searchValue;
             Category = category;
@@ -15,12 +15,21 @@ namespace Coomes.SpendingReports.Api.Categories
 
         public bool Apply(Transaction transaction)
         {
-            if(transaction.Description.Contains(SearchValue))
+            if(!transaction.IsCategorized() && transaction.Description.Contains(SearchValue))
             {
                 transaction.Category = Category;
                 return true;
             }
             return false;
+        }
+
+        public Dto.Classifier ToDTO() 
+        {
+            return new Dto.Classifier 
+            {
+                Category = this.Category,
+                SearchValue = this.SearchValue
+            };
         }
     }
 }

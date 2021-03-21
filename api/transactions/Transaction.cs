@@ -13,7 +13,7 @@ namespace Coomes.SpendingReports.Api.Transactions
         public string Category { 
             get
             {
-                if(string.IsNullOrWhiteSpace(_category)) {
+                if(!IsCategorized()) {
                     return Constants.Uncategorized;
                 }
                 else 
@@ -25,6 +25,11 @@ namespace Coomes.SpendingReports.Api.Transactions
             {
                 _category = value;
             } 
+        }
+
+        public bool IsCategorized() 
+        {
+            return !string.IsNullOrWhiteSpace(_category);
         }
 
         public DTO.Transaction ToDTO() 

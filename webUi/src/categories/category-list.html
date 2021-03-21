@@ -1,3 +1,15 @@
 <template>
+    <require from="./category-list.css"></require>
+
     <h4>${message}</h4>
+    <table class="category-table">
+        <tr class="category-table__header">
+            <th class="category-table__cell">Category</th>
+            <th class="category-table__cell">Search Text</th>
+        </tr>
+        <tr repeat.for="classifier of classifiers" class="category-table__row">
+            <td class="category-table__cell">${classifier.date}</td>
+            <td class="category-table__cell">${classifier.amount}</td>
+        </tr>
+    </table>
 </template>
