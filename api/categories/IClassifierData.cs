@@ -6,5 +6,7 @@ namespace Coomes.SpendingReports.Api.Categories
     public interface IClassifierData
     {
         Task<ICollection<Classifier>> GetAll();
+
+        Task<Classifier> Add(Classifier classifier);
     }
 }

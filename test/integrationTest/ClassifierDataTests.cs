@@ -1,5 +1,5 @@
 using Coomes.SpendingReports.CsvData;
-using Coomes.SpendingReports.Api.Transactions;
+using Coomes.SpendingReports.Api.Categories;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,6 +23,25 @@ namespace Coomes.SpendingReports.IntegrationTest
 
             // assert
             classifiers.Count.Should().BeGreaterThan(0);
+        }
+
+        [TestMethod]
+        public async Task Add_PersistsClassifier() 
+        {
+            // arrange
+            InitialData.ResetStorage();
+            var newClassifier = new Classifier("new category", "new search text");
+            var sut = new ClassifierData(InitialData.StoreLocation);
+            var originalCount = (await sut.GetAll()).Count;
+
+            // act
+            var addResult = await sut.Add(newClassifier);
+            var postAddCount = (await sut.GetAll()).Count;
+
+            // assert
+            addResult.Category.Should().Be(newClassifier.Category);
+            addResult.SearchValue.Should().Be(newClassifier.SearchValue);
+            postAddCount.Should().Be(originalCount + 1);
         }
     }
 }

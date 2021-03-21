@@ -13,6 +13,10 @@ namespace Coomes.SpendingReports.Api.Categories
             Category = category;
         }
 
+        public Classifier(Dto.Classifier dto) : this(dto.SearchValue, dto.Category)
+        {
+        }
+
         public bool Apply(Transaction transaction)
         {
             if(!transaction.IsCategorized() && transaction.Description.Contains(SearchValue))

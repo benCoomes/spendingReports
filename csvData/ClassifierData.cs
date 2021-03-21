@@ -26,5 +26,16 @@ namespace Coomes.SpendingReports.CsvData
             var domainModels = _storage.Entities.Select(t => t.ToDomainModel()).ToList();
             return Task.FromResult((ICollection<Classifier>)domainModels);
         }
+
+        public Task<Classifier> Add(Classifier classifier) 
+        {
+            var dataModel = classifier.ToDataModel();
+            
+            _storage.EnsureInitialized();
+            _storage.Entities.Add(dataModel);
+            _storage.SaveToFile();
+            
+            return Task.FromResult(dataModel.ToDomainModel());
+        }
     }
 }

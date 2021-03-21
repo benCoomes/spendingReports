@@ -8,8 +8,12 @@
             <th class="category-table__cell">Search Text</th>
         </tr>
         <tr repeat.for="classifier of classifiers" class="category-table__row">
-            <td class="category-table__cell">${classifier.date}</td>
-            <td class="category-table__cell">${classifier.amount}</td>
+            <td class="category-table__cell">${classifier.category}</td>
+            <td class="category-table__cell">${classifier.searchText}</td>
+        </tr>
+        <tr>
+            <td class="category-table__cell"><input type="text" placeholder="category" value.bind="newCategory" focus.bind="categoryInputFocus"/></td>
+            <td class="category-table__cell"><input type="text" placeholder="search text" value.bind="newSearchText" focus.bind="searchTextInputFocus"/></td>
         </tr>
     </table>
 </template>
