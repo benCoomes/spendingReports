@@ -5,13 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Coomes.SpendingReports.Api.Transactions.Operations;
 using Coomes.SpendingReports.Api.Transactions;
+using Coomes.SpendingReports.Api.Categories.Operations;
+using Coomes.SpendingReports.Api.Categories;
 using Coomes.SpendingReports.CsvData;
 
 namespace Coomes.SpendingReports.Web
 {
     public class Startup
     {
-        internal const string AllowAll = "allowAnyOrigin";
+        internal const string AllowLocalhost = "allowLocalhost";
 
         public Startup(IConfiguration configuration)
         {
@@ -26,9 +28,9 @@ namespace Coomes.SpendingReports.Web
             // TODO: remove allow any CORS once web UI and API are run in the same container
             services.AddCors(options => 
             {
-                options.AddPolicy(name: AllowAll, builder => 
+                options.AddPolicy(name: AllowLocalhost, builder => 
                 {
-                    builder.AllowAnyOrigin();
+                    builder.WithOrigins("http://localhost:8081");
                     builder.AllowAnyHeader();
                     builder.AllowAnyMethod();
                 });
@@ -38,11 +40,14 @@ namespace Coomes.SpendingReports.Web
 
             // operations
             services.AddTransient<GetTransactions>();
+            services.AddTransient<AddClassifier>();
+            services.AddTransient<GetClassifiers>();
             services.AddSingleton<ImportTransactions>();
 
             // data access
             var storageDir = Configuration.GetValue<string>("CsvStorage:Directory");
             services.AddSingleton<ITransactionData>(new TransactionData(storageDir));
+            services.AddSingleton<IClassifierData>(new ClassifierData(storageDir));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +62,7 @@ namespace Coomes.SpendingReports.Web
 
             app.UseRouting();
 
-            app.UseCors(AllowAll);
+            app.UseCors(AllowLocalhost);
 
             app.UseAuthorization();
 

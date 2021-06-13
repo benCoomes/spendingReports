@@ -9,11 +9,20 @@ export class CategoryList {
         this.classifiers = [];
     }
 
+    bind() {
+        this.getClassifiers();
+    }
+
     getClassifiers() {
         fetch("http://localhost:8080/classifier")
         .then(res => res.json())
         .then(serverData => {
-            this.classifiers = serverData.map(serverModel => new this.classifiers(serverModel))
+            this.classifiers = serverData.map(serverModel => {
+                return {
+                    category: serverModel.category,
+                    searchText: serverModel.searchValue
+                };
+            });
         })
         .catch((error) => {
             console.error('Error loading classifiers:', error);
@@ -25,20 +34,23 @@ export class CategoryList {
             method: "POST",
             body: JSON.stringify({
                 category: this.newCategory,
-                searchText: this.newSearchText
+                searchValue: this.newSearchText
             }),
-            headers: new Headers()
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
         })
         .then(res => res.json())
         .then(newServerClassifier => {
             this.classifiers.push({
                 category: newServerClassifier.category,
-                searchText: newServerClassifier.searchText
+                searchText: newServerClassifier.searchValue
             });
             this.newCategory = "";
             this.newSearchText = "";
         })
         .catch(error => {
+            alert("Error saving new classifier.");
             console.error('Failed to create new classifier:', error);
         });
     }
@@ -58,12 +70,6 @@ export class CategoryList {
             && this.newCategory)
         {
             this.postNewClassifier();
-            this.classifiers.push({
-                category: this.newCategory,
-                searchText: this.newSearchText
-            });
-            this.newCategory = "";
-            this.newSearchText = "";
         }
     }
 }
