@@ -10,13 +10,27 @@ import (
 )
 
 func main() {
-	filename := "../testTransactions.csv"
+	transactionFile := "../testTransactions.csv"
+	vendorFile := "../testVendors.csv"
 
-	transactions := ReadTransactionsFromFile(filename)
+	transactions := ReadTransactionsFromFile(transactionFile)
+	vendors := ReadVendorsFromFile(vendorFile)
 
-	for _, transaction := range transactions {
-		fmt.Println(transaction)
+	fmt.Println("Vendors:")
+	for _, vendor := range vendors {
+		fmt.Println(vendor)
 	}
+
+	fmt.Println("\nTransactions:")
+	for _, transaction := range transactions {
+		vendor, foundMatch := MatchVendor(vendors, transaction)
+		if foundMatch {
+			fmt.Printf("Transaction \"%v\" matched to vendor \"%v\"\n", transaction, vendor.name)
+		} else {
+			fmt.Printf("Transaction \"%v\" did not match any vendor.\n", transaction)
+		}
+	}
+
 }
 
 type Transaction struct {
@@ -29,15 +43,81 @@ func (t Transaction) String() string {
 	return fmt.Sprintf("[%v] [%v] [%v]", t.date, t.amount, t.details)
 }
 
+type Vendor struct {
+	matchPattern string
+	name         string
+}
+
+func (v Vendor) String() string {
+	return fmt.Sprintf("[%v], [%v]", v.name, v.matchPattern)
+}
+
+func (v Vendor) Matches(t Transaction) bool {
+	return v.matchPattern == t.details
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
+func MatchVendor(vendors []Vendor, transaction Transaction) (Vendor, bool) {
+	for _, vendor := range vendors {
+		if vendor.Matches(transaction) {
+			return vendor, true
+		}
+	}
+	return Vendor{}, false
+}
+
+func ReadVendorsFromFile(path string) []Vendor {
+	contents := ReadAsString(path)
+	lines := strings.Split(contents, "\n")
+
+	var vendors []Vendor
+
+	for _, line := range lines {
+		vendor, err := ParseVendor(line)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			vendors = append(vendors, vendor)
+		}
+	}
+
+	return vendors
+}
+
+const expectedVendorSegments = 2
+
+func ParseVendor(raw string) (Vendor, error) {
+	segments := strings.Split(raw, ",")
+	actualSegments := len(segments)
+	if actualSegments != expectedVendorSegments {
+		errtext := fmt.Sprintf("Expected %v items in raw string but found %v", expectedSegments, expectedVendorSegments)
+		return Vendor{}, errors.New(errtext)
+	}
+
+	name, err := ParseString(segments[0])
+	if err != nil {
+		return Vendor{}, err
+	}
+
+	pattern, err := ParseString(segments[1])
+	if err != nil {
+		return Vendor{}, err
+	}
+
+	return Vendor{
+		name:         name,
+		matchPattern: pattern,
+	}, nil
+}
+
 func ReadTransactionsFromFile(path string) []Transaction {
 
-	var contents = ReadAsString(path)
+	contents := ReadAsString(path)
 	lines := strings.Split(contents, "\n")
 
 	var transactions []Transaction
@@ -69,12 +149,12 @@ func ParseTransaction(raw string) (Transaction, error) {
 		return Transaction{}, err
 	}
 
-	amount, err := ParseAmount(segments[1])
+	amount, err := ParseFloat32(segments[1])
 	if err != nil {
 		return Transaction{}, err
 	}
 
-	details, err := ParseDetails(segments[2])
+	details, err := ParseString(segments[2])
 	if err != nil {
 		return Transaction{}, err
 	}
@@ -90,7 +170,7 @@ func ParseDate(dateString string) (string, error) {
 	return strings.TrimSpace(dateString), nil
 }
 
-func ParseAmount(amountString string) (float32, error) {
+func ParseFloat32(amountString string) (float32, error) {
 	amountString = strings.TrimSpace(amountString)
 
 	amount, err := strconv.ParseFloat(amountString, 32)
@@ -102,7 +182,7 @@ func ParseAmount(amountString string) (float32, error) {
 	return float32(amount), nil
 }
 
-func ParseDetails(detailsString string) (string, error) {
+func ParseString(detailsString string) (string, error) {
 	return strings.TrimSpace(detailsString), nil
 }
 
