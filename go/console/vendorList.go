@@ -7,7 +7,7 @@ import (
 
 type VendorList []Vendor
 
-func AddToVendor(vendors VendorList, transaction Transaction) (Vendor, bool) {
+func (vendors VendorList) AddToMatchingVendor(transaction Transaction) (Vendor, bool) {
 	// use index because value returns a copy, and modifying a copy is pointless
 	for i := range vendors {
 		if vendors[i].TryAdd(transaction) {
@@ -17,7 +17,7 @@ func AddToVendor(vendors VendorList, transaction Transaction) (Vendor, bool) {
 	return Vendor{}, false
 }
 
-func ReadVendorsFromFile(path string) VendorList {
+func CreateVendorListFromFile(path string) VendorList {
 	contents := ReadAsString(path)
 	lines := strings.Split(contents, "\n")
 

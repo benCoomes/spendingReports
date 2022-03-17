@@ -9,7 +9,7 @@ func main() {
 	vendorFile := "../testVendors.csv"
 
 	transactions := ReadTransactionsFromFile(transactionFile)
-	vendors := ReadVendorsFromFile(vendorFile)
+	vendors := CreateVendorListFromFile(vendorFile)
 
 	fmt.Println("Vendors:")
 	for _, vendor := range vendors {
@@ -18,7 +18,7 @@ func main() {
 
 	fmt.Println("\nTransactions:")
 	for _, transaction := range transactions {
-		vendor, foundMatch := AddToVendor(vendors, transaction)
+		vendor, foundMatch := vendors.AddToMatchingVendor(transaction)
 		if foundMatch {
 			fmt.Printf("Transaction \"%v\" matched to vendor \"%v\"\n", transaction, vendor.name)
 		} else {
