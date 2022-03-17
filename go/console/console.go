@@ -41,16 +41,17 @@ type Transaction struct {
 }
 
 func (t Transaction) String() string {
-	return fmt.Sprintf("[%v] [%v] [%v]", t.date, t.amount, t.details)
+	return fmt.Sprintf("%v %v %v", t.date, t.amount, t.details)
 }
 
 type Vendor struct {
-	matcher *regexp.Regexp
-	name    string
+	matcher    *regexp.Regexp
+	name       string
+	categories []string
 }
 
 func (v Vendor) String() string {
-	return fmt.Sprintf("[%v], [%v]", v.name, v.matcher)
+	return fmt.Sprintf("%v, %v, [%v]", v.name, v.matcher, strings.Join(v.categories, ";"))
 }
 
 func (v Vendor) Matches(t Transaction) bool {
@@ -90,7 +91,7 @@ func ReadVendorsFromFile(path string) []Vendor {
 	return vendors
 }
 
-const expectedVendorSegments = 2
+const expectedVendorSegments = 3
 
 func ParseVendor(raw string) (Vendor, error) {
 	segments := strings.Split(raw, ",")
@@ -110,9 +111,12 @@ func ParseVendor(raw string) (Vendor, error) {
 		return Vendor{}, err
 	}
 
+	categories := ParseStringSlice(segments[2], ";")
+
 	return Vendor{
-		name:    name,
-		matcher: matcher,
+		name:       name,
+		matcher:    matcher,
+		categories: categories,
 	}, nil
 }
 
@@ -185,6 +189,14 @@ func ParseFloat32(amountString string) (float32, error) {
 
 func ParseString(detailsString string) (string, error) {
 	return strings.TrimSpace(detailsString), nil
+}
+
+func ParseStringSlice(input string, sep string) []string {
+	pieces := strings.Split(input, sep)
+	for i, piece := range pieces {
+		pieces[i] = strings.TrimSpace(piece)
+	}
+	return pieces
 }
 
 func ParseRegex(regexString string) (*regexp.Regexp, error) {

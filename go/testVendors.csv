@@ -1,5 +1,5 @@
-Steam, Steam Store Transactions
-My Job, .*Software Inc Payroll.*
-Kroger, .*Kroger.*
-Aldi, .*Aldi.*
-Duck Doughnuts, Duck Doughnuts
+Steam, Steam Store Transactions, Fun;Video Games
+My Job, .*Software Inc Payroll.*, Income
+Kroger, .*Kroger.*, Needs;Grocery
+Aldi, .*Aldi.*, Needs;Grocery
+Duck Doughnuts, Duck Doughnuts, Needs
