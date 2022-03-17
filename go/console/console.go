@@ -24,12 +24,17 @@ func main() {
 
 	fmt.Println("\nTransactions:")
 	for _, transaction := range transactions {
-		vendor, foundMatch := MatchVendor(vendors, transaction)
+		vendor, foundMatch := AddToVendor(vendors, transaction)
 		if foundMatch {
 			fmt.Printf("Transaction \"%v\" matched to vendor \"%v\"\n", transaction, vendor.name)
 		} else {
 			fmt.Printf("Transaction \"%v\" did not match any vendor.\n", transaction)
 		}
+	}
+
+	fmt.Println("\nNet Totals:")
+	for _, vendor := range vendors {
+		fmt.Printf("%v: %v\n", vendor.name, vendor.Total())
 	}
 
 }
@@ -45,9 +50,10 @@ func (t Transaction) String() string {
 }
 
 type Vendor struct {
-	matcher    *regexp.Regexp
-	name       string
-	categories []string
+	matcher      *regexp.Regexp
+	name         string
+	categories   []string
+	transactions []Transaction
 }
 
 func (v Vendor) String() string {
@@ -58,16 +64,35 @@ func (v Vendor) Matches(t Transaction) bool {
 	return v.matcher.FindStringIndex(t.details) != nil
 }
 
+// use a pointer, because modifying a copy is pointless
+func (v *Vendor) TryAdd(t Transaction) bool {
+	if v.Matches(t) {
+		v.transactions = append(v.transactions, t)
+		return true
+	} else {
+		return false
+	}
+}
+
+func (v *Vendor) Total() float32 {
+	var sum float32 = 0.0
+	for _, transaction := range v.transactions {
+		sum = sum + transaction.amount
+	}
+	return sum
+}
+
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
-func MatchVendor(vendors []Vendor, transaction Transaction) (Vendor, bool) {
-	for _, vendor := range vendors {
-		if vendor.Matches(transaction) {
-			return vendor, true
+func AddToVendor(vendors []Vendor, transaction Transaction) (Vendor, bool) {
+	// use index because value returns a copy, and modifying a copy is pointless
+	for i := range vendors {
+		if vendors[i].TryAdd(transaction) {
+			return vendors[i], true
 		}
 	}
 	return Vendor{}, false
