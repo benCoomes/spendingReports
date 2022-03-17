@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -44,16 +45,16 @@ func (t Transaction) String() string {
 }
 
 type Vendor struct {
-	matchPattern string
-	name         string
+	matcher *regexp.Regexp
+	name    string
 }
 
 func (v Vendor) String() string {
-	return fmt.Sprintf("[%v], [%v]", v.name, v.matchPattern)
+	return fmt.Sprintf("[%v], [%v]", v.name, v.matcher)
 }
 
 func (v Vendor) Matches(t Transaction) bool {
-	return v.matchPattern == t.details
+	return v.matcher.FindStringIndex(t.details) == nil
 }
 
 func check(e error) {
@@ -104,14 +105,14 @@ func ParseVendor(raw string) (Vendor, error) {
 		return Vendor{}, err
 	}
 
-	pattern, err := ParseString(segments[1])
+	matcher, err := ParseRegex(segments[1])
 	if err != nil {
 		return Vendor{}, err
 	}
 
 	return Vendor{
-		name:         name,
-		matchPattern: pattern,
+		name:    name,
+		matcher: matcher,
 	}, nil
 }
 
@@ -184,6 +185,18 @@ func ParseFloat32(amountString string) (float32, error) {
 
 func ParseString(detailsString string) (string, error) {
 	return strings.TrimSpace(detailsString), nil
+}
+
+func ParseRegex(regexString string) (*regexp.Regexp, error) {
+	regexString = strings.TrimSpace(regexString)
+
+	regex, err := regexp.Compile(regexString)
+	if err != nil {
+		errtext := fmt.Sprintf("Failed to parse into a regular expression. String value: %v", regexString)
+		return nil, errors.New(errtext)
+	}
+
+	return regex, nil
 }
 
 func ReadAsString(path string) string {
