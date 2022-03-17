@@ -54,7 +54,7 @@ func (v Vendor) String() string {
 }
 
 func (v Vendor) Matches(t Transaction) bool {
-	return v.matcher.FindStringIndex(t.details) == nil
+	return v.matcher.FindStringIndex(t.details) != nil
 }
 
 func check(e error) {
@@ -96,7 +96,7 @@ func ParseVendor(raw string) (Vendor, error) {
 	segments := strings.Split(raw, ",")
 	actualSegments := len(segments)
 	if actualSegments != expectedVendorSegments {
-		errtext := fmt.Sprintf("Expected %v items in raw string but found %v", expectedSegments, expectedVendorSegments)
+		errtext := fmt.Sprintf("Expected %v items in raw string but found %v", expectedVendorSegments, expectedSegments)
 		return Vendor{}, errors.New(errtext)
 	}
 
