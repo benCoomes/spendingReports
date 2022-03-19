@@ -1,51 +1,67 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func head() SpendingTreeNode {
 	return SpendingTreeNode{
-		children: make([]SpendingTreeNode, 0),
-		vendors:  make([]Vendor, 0),
+		children: make([]*SpendingTreeNode, 0),
+		vendors:  make([]*Vendor, 0),
 		name:     "head",
 	}
 }
 
-func vendor_1A_1() Vendor {
+func vendor_1A_1() *Vendor {
 	transaction := Transaction{
 		amount:  -10.00,
 		details: "vendor_1A_1_transaction_1",
 		date:    "2022-01-01",
 	}
 
-	return Vendor{
+	return &Vendor{
 		name:         "vendor_1A_1",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_A"},
 	}
 }
 
-func vendor_1A_2() Vendor {
+func vendor_1A_2() *Vendor {
 	transaction := Transaction{
 		amount:  -20.00,
 		details: "vendor_1A_2_transaction_1",
 		date:    "2022-02-02",
 	}
 
-	return Vendor{
+	return &Vendor{
 		name:         "vendor_1A_2",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_A"},
 	}
 }
 
-func vendor_1B_1() Vendor {
+func vendor_1A_2A_1() *Vendor {
+	transation := Transaction{
+		amount:  -120.00,
+		details: "vendor_1A_2A_1_transaction_1",
+		date:    "2022-02-02",
+	}
+
+	return &Vendor{
+		name:         "vendor_1A_2A_1_transaction_1",
+		transactions: []Transaction{transation},
+		categories:   []string{"level_1_A", "level_2_A"},
+	}
+}
+
+func vendor_1B_1() *Vendor {
 	transaction := Transaction{
 		amount:  -30.00,
 		details: "vendor_1B_1_transaction_1",
 		date:    "2022-03_03",
 	}
 
-	return Vendor{
+	return &Vendor{
 		name:         "vendor_1B_1",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_B"},
@@ -62,8 +78,8 @@ func Test_AddVendor_SingleCategorySingleVendor(t *testing.T) {
 
 	// then
 	actualFirstLevel := head.children[0]
-	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1A1.categories[0])
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A1.name)
+	checkNodeName(t, actualFirstLevel, "actual first level", vendor1A1.categories[0])
+	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A1.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
 }
@@ -80,9 +96,9 @@ func Test_AddVendor_SingleCategoryTwoVendor(t *testing.T) {
 
 	// then
 	actualFirstLevel := head.children[0]
-	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1A1.categories[0])
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A1.name)
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A2.name)
+	checkNodeName(t, actualFirstLevel, "actual first level", vendor1A1.categories[0])
+	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A1.name)
+	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A2.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
 }
@@ -100,13 +116,31 @@ func Test_AddVendor_TwoCategoriesSingleVendor(t *testing.T) {
 	// then
 	actualFirstLevelA := head.children[0]
 	actualFirstLevelB := head.children[1]
-	checkNodeName(t, &actualFirstLevelA, "actual first level A", vendor1A1.categories[0])
-	checkNodeName(t, &actualFirstLevelB, "actual first level B", vendor1B1.categories[0])
+	checkNodeName(t, actualFirstLevelA, "actual first level A", vendor1A1.categories[0])
+	checkNodeName(t, actualFirstLevelB, "actual first level B", vendor1B1.categories[0])
 
-	checkVendorExistsOnNode(t, &actualFirstLevelA, "actual first level A", vendor1A1.name)
-	checkVendorExistsOnNode(t, &actualFirstLevelB, "actual first level B", vendor1B1.name)
+	checkVendorExistsOnNode(t, actualFirstLevelA, "actual first level A", vendor1A1.name)
+	checkVendorExistsOnNode(t, actualFirstLevelB, "actual first level B", vendor1B1.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
+}
+
+func Test_AddVendor_TwoLevelsDeep(t *testing.T) {
+	// given
+	head := head()
+	vendor1A2A := vendor_1A_2A_1()
+
+	// when
+	head.AddVendor(vendor1A2A)
+
+	// then
+	actualFirstLevel := head.children[0]
+	checkNodeName(t, actualFirstLevel, "actual first level", vendor1A2A.categories[0])
+
+	actualSecondLevel := actualFirstLevel.children[0]
+	checkNodeName(t, actualSecondLevel, "actual second level", vendor1A2A.categories[1])
+
+	checkVendorExistsOnNode(t, actualSecondLevel, "actual second level", vendor1A2A.name)
 }
 
 func checkNodeName(t *testing.T, node *SpendingTreeNode, nodeDescription string, expectedName string) {
