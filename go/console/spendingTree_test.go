@@ -10,43 +10,43 @@ func head() SpendingTreeNode {
 	}
 }
 
-func vendor1() Vendor {
+func vendor_1A_1() Vendor {
 	transaction := Transaction{
 		amount:  -10.00,
-		details: "vendor1_transaction1",
+		details: "vendor_1A_1_transaction_1",
 		date:    "2022-01-01",
 	}
 
 	return Vendor{
-		name:         "vendor1",
+		name:         "vendor_1A_1",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_A"},
 	}
 }
 
-func vendor2() Vendor {
+func vendor_1A_2() Vendor {
 	transaction := Transaction{
 		amount:  -20.00,
-		details: "vendor2_transaction1",
+		details: "vendor_1A_2_transaction_1",
 		date:    "2022-02-02",
 	}
 
 	return Vendor{
-		name:         "vendor2",
+		name:         "vendor_1A_2",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_A"},
 	}
 }
 
-func vendor3() Vendor {
+func vendor_1B_1() Vendor {
 	transaction := Transaction{
 		amount:  -30.00,
-		details: "vendor3_transaction1",
+		details: "vendor_1B_1_transaction_1",
 		date:    "2022-03_03",
 	}
 
 	return Vendor{
-		name:         "vendor3",
+		name:         "vendor_1B_1",
 		transactions: []Transaction{transaction},
 		categories:   []string{"level_1_B"},
 	}
@@ -55,15 +55,15 @@ func vendor3() Vendor {
 func Test_AddVendor_SingleCategorySingleVendor(t *testing.T) {
 	// given
 	head := head()
-	vendor1 := vendor1()
+	vendor1A1 := vendor_1A_1()
 
 	// when
-	head.AddVendor(vendor1)
+	head.AddVendor(vendor1A1)
 
 	// then
 	actualFirstLevel := head.children[0]
-	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1.categories[0])
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1.name)
+	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1A1.categories[0])
+	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A1.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
 }
@@ -71,18 +71,18 @@ func Test_AddVendor_SingleCategorySingleVendor(t *testing.T) {
 func Test_AddVendor_SingleCategoryTwoVendor(t *testing.T) {
 	// given
 	head := head()
-	vendor1 := vendor1()
-	vendor2 := vendor2()
+	vendor1A1 := vendor_1A_1()
+	vendor1A2 := vendor_1A_2()
 
 	// when
-	head.AddVendor(vendor1)
-	head.AddVendor(vendor2)
+	head.AddVendor(vendor1A1)
+	head.AddVendor(vendor1A2)
 
 	// then
 	actualFirstLevel := head.children[0]
-	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1.categories[0])
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1.name)
-	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor2.name)
+	checkNodeName(t, &actualFirstLevel, "actual first level", vendor1A1.categories[0])
+	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A1.name)
+	checkVendorExistsOnNode(t, &actualFirstLevel, "actual first level", vendor1A2.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
 }
@@ -90,21 +90,21 @@ func Test_AddVendor_SingleCategoryTwoVendor(t *testing.T) {
 func Test_AddVendor_TwoCategoriesSingleVendor(t *testing.T) {
 	// given
 	head := head()
-	vendor1 := vendor1()
-	vendor3 := vendor3()
+	vendor1A1 := vendor_1A_1()
+	vendor1B1 := vendor_1B_1()
 
 	// when
-	head.AddVendor(vendor1)
-	head.AddVendor(vendor3)
+	head.AddVendor(vendor1A1)
+	head.AddVendor(vendor1B1)
 
 	// then
 	actualFirstLevelA := head.children[0]
 	actualFirstLevelB := head.children[1]
-	checkNodeName(t, &actualFirstLevelA, "actual first level A", vendor1.categories[0])
-	checkNodeName(t, &actualFirstLevelB, "actual first level B", vendor3.categories[0])
+	checkNodeName(t, &actualFirstLevelA, "actual first level A", vendor1A1.categories[0])
+	checkNodeName(t, &actualFirstLevelB, "actual first level B", vendor1B1.categories[0])
 
-	checkVendorExistsOnNode(t, &actualFirstLevelA, "actual first level A", vendor1.name)
-	checkVendorExistsOnNode(t, &actualFirstLevelB, "actual first level B", vendor3.name)
+	checkVendorExistsOnNode(t, &actualFirstLevelA, "actual first level A", vendor1A1.name)
+	checkVendorExistsOnNode(t, &actualFirstLevelB, "actual first level B", vendor1B1.name)
 
 	t.Logf("\n%v", head.PrettyPrint())
 }
