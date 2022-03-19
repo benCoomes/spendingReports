@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
-	transactionFile := "../testTransactions.csv"
-	vendorFile := "../testVendors.csv"
+	if len(os.Args) < 3 {
+		fmt.Println("Missing required arguments. Usage: spendtool [vendorFile] [transactionFile]")
+		return
+	}
+	vendorFile := os.Args[1]
+	transactionFile := os.Args[2]
 
 	transactions := ReadTransactionsFromFile(transactionFile)
 	vendors := CreateVendorListFromFile(vendorFile)
@@ -32,7 +37,7 @@ func main() {
 	}
 
 	tree := SpendingTreeNode{
-		name:     "Spending Tree",
+		name:     "Total Spending",
 		vendors:  make([]*Vendor, 0),
 		children: make([]*SpendingTreeNode, 0),
 	}

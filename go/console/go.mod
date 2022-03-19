@@ -1,3 +1,3 @@
-module bcoomes/spendingreports/console
+module bcoomes/spendtool
 
 go 1.17
