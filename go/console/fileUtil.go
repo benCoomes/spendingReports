@@ -14,16 +14,16 @@ func ParseDate(dateString string) (string, error) {
 	return strings.TrimSpace(dateString), nil
 }
 
-func ParseFloat32(floatString string) (float32, error) {
+func ParseFloat64(floatString string) (float64, error) {
 	floatString = strings.TrimSpace(floatString)
 
-	amount, err := strconv.ParseFloat(floatString, 32)
+	amount, err := strconv.ParseFloat(floatString, 64)
 	if err != nil {
 		errtext := fmt.Sprintf("Failed to parse amount into a number. String value: %v", floatString)
 		return 0, errors.New(errtext)
 	}
 
-	return float32(amount), nil
+	return float64(amount), nil
 }
 
 func ParseString(input string) (string, error) {

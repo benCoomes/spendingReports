@@ -32,8 +32,8 @@ func (v *Vendor) TryAdd(t Transaction) bool {
 	}
 }
 
-func (v *Vendor) Total() float32 {
-	var sum float32 = 0.0
+func (v *Vendor) Total() float64 {
+	sum := 0.0
 	for _, transaction := range v.transactions {
 		sum = sum + transaction.amount
 	}

@@ -68,6 +68,42 @@ func vendor_1B_1() *Vendor {
 	}
 }
 
+func Test_Total(t *testing.T) {
+	// given
+	head := head()
+	v_1A_1 := vendor_1A_1()
+	v_1A_2 := vendor_1A_2()
+	v_1A_2A_1 := vendor_1A_2A_1()
+	v_1B_1 := vendor_1B_1()
+
+	// when
+	head.AddVendor(v_1A_1)
+	head.AddVendor(v_1A_2)
+	head.AddVendor(v_1A_2A_1)
+	head.AddVendor(v_1B_1)
+
+	actualHeadTotal := head.Total()
+	// every observable property of a system will become depended upon! - including the order the child nodes are created.
+	actual1ATotal := head.children[0].Total()
+	actual1BTotal := head.children[1].Total()
+
+	// then
+	var expectedHeadTotal = v_1A_1.Total() + v_1A_2.Total() + v_1A_2A_1.Total() + v_1B_1.Total()
+	if actualHeadTotal != expectedHeadTotal {
+		t.Fatalf("Expected head total to be %v but found %v", expectedHeadTotal, actualHeadTotal)
+	}
+
+	var expected1ATotal = v_1A_1.Total() + v_1A_2.Total() + v_1A_2A_1.Total()
+	if actual1ATotal != expected1ATotal {
+		t.Fatalf("Expected 1B total to be %v but found %v", expected1ATotal, actual1ATotal)
+	}
+
+	var expected1BTotal = v_1B_1.Total()
+	if actual1BTotal != expected1BTotal {
+		t.Fatalf("Expected 1B total to be %v but found %v", expected1BTotal, actual1BTotal)
+	}
+}
+
 func Test_AddVendor_SingleCategorySingleVendor(t *testing.T) {
 	// given
 	head := head()

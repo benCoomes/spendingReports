@@ -8,7 +8,7 @@ import (
 
 type Transaction struct {
 	date    string
-	amount  float32
+	amount  float64
 	details string
 }
 
@@ -50,7 +50,7 @@ func ParseTransaction(raw string) (Transaction, error) {
 		return Transaction{}, err
 	}
 
-	amount, err := ParseFloat32(segments[1])
+	amount, err := ParseFloat64(segments[1])
 	if err != nil {
 		return Transaction{}, err
 	}

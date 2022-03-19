@@ -18,7 +18,7 @@ func (head SpendingTreeNode) PrettyPrint() string {
 
 func (node *SpendingTreeNode) prettyPrint(level int) string {
 	tabs := strings.Repeat("   ", level)
-	theString := fmt.Sprintf("%v%v\n", tabs, node.name)
+	theString := fmt.Sprintf("%v%v (%v)\n", tabs, node.name, node.Total())
 
 	tabs = tabs + "   "
 	for i := range node.vendors {
@@ -30,6 +30,19 @@ func (node *SpendingTreeNode) prettyPrint(level int) string {
 	}
 
 	return theString
+}
+
+func (node *SpendingTreeNode) Total() float64 {
+	sum := 0.0
+	for i := range node.vendors {
+		sum += node.vendors[i].Total()
+	}
+
+	for i := range node.children {
+		sum += node.children[i].Total()
+	}
+
+	return sum
 }
 
 func (head *SpendingTreeNode) AddVendor(vendor *Vendor) {
