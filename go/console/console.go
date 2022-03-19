@@ -31,4 +31,15 @@ func main() {
 		fmt.Printf("%v: %v\n", vendor.name, vendor.Total())
 	}
 
+	tree := SpendingTreeNode{
+		name:     "Spending Tree",
+		vendors:  make([]Vendor, 0),
+		children: make([]SpendingTreeNode, 0),
+	}
+	for i := range vendors {
+		tree.AddVendorAttempt1(vendors[i])
+	}
+	fmt.Printf("\n\n%v\n\n", tree)
+	fmt.Printf("\n\n%v\n\n", tree.PrettyPrint())
+
 }
