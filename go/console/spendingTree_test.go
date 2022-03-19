@@ -80,8 +80,6 @@ func Test_AddVendor_SingleCategorySingleVendor(t *testing.T) {
 	actualFirstLevel := head.children[0]
 	checkNodeName(t, actualFirstLevel, "actual first level", vendor1A1.categories[0])
 	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A1.name)
-
-	t.Logf("\n%v", head.PrettyPrint())
 }
 
 func Test_AddVendor_SingleCategoryTwoVendor(t *testing.T) {
@@ -99,8 +97,6 @@ func Test_AddVendor_SingleCategoryTwoVendor(t *testing.T) {
 	checkNodeName(t, actualFirstLevel, "actual first level", vendor1A1.categories[0])
 	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A1.name)
 	checkVendorExistsOnNode(t, actualFirstLevel, "actual first level", vendor1A2.name)
-
-	t.Logf("\n%v", head.PrettyPrint())
 }
 
 func Test_AddVendor_TwoCategoriesSingleVendor(t *testing.T) {
@@ -121,8 +117,6 @@ func Test_AddVendor_TwoCategoriesSingleVendor(t *testing.T) {
 
 	checkVendorExistsOnNode(t, actualFirstLevelA, "actual first level A", vendor1A1.name)
 	checkVendorExistsOnNode(t, actualFirstLevelB, "actual first level B", vendor1B1.name)
-
-	t.Logf("\n%v", head.PrettyPrint())
 }
 
 func Test_AddVendor_TwoLevelsDeep(t *testing.T) {
