@@ -16,24 +16,17 @@ func main() {
 	transactions := ReadTransactionsFromFile(transactionFile)
 	vendors := CreateVendorListFromFile(vendorFile)
 
-	fmt.Println("Vendors:")
-	for _, vendor := range vendors {
-		fmt.Println(vendor)
-	}
-
-	fmt.Println("\nTransactions:")
+	fmt.Println("\nUncategorized Transactions:")
 	for _, transaction := range transactions {
-		vendor, foundMatch := vendors.AddToMatchingVendor(transaction)
-		if foundMatch {
-			fmt.Printf("Transaction \"%v\" matched to vendor \"%v\"\n", transaction, vendor.name)
-		} else {
+		_, foundMatch := vendors.AddToMatchingVendor(transaction)
+		if !foundMatch {
 			fmt.Printf("Transaction \"%v\" did not match any vendor.\n", transaction)
 		}
 	}
 
 	fmt.Println("\nNet Totals:")
 	for _, vendor := range vendors {
-		fmt.Printf("%v: %v\n", vendor.name, vendor.Total())
+		fmt.Printf("%v: %.2f\n", vendor.name, vendor.Total())
 	}
 
 	tree := SpendingTreeNode{

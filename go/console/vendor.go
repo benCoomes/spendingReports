@@ -43,10 +43,14 @@ func (v *Vendor) Total() float64 {
 const expectedVendorSegments = 3
 
 func ParseVendor(raw string) (Vendor, error) {
+	if strings.TrimSpace(raw) == "" {
+		return Vendor{}, errors.New("raw string cannot be empty or only whitespace")
+	}
+
 	segments := strings.Split(raw, ",")
 	actualSegments := len(segments)
 	if actualSegments != expectedVendorSegments {
-		errtext := fmt.Sprintf("Expected %v items in raw string but found %v", expectedVendorSegments, expectedSegments)
+		errtext := fmt.Sprintf("expected %v items in raw vendor string but found %v. Raw string: %v", expectedVendorSegments, expectedSegments, raw)
 		return Vendor{}, errors.New(errtext)
 	}
 

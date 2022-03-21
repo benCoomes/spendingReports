@@ -38,10 +38,14 @@ func ReadTransactionsFromFile(path string) []Transaction {
 const expectedSegments = 3
 
 func ParseTransaction(raw string) (Transaction, error) {
+	if strings.TrimSpace(raw) == "" {
+		return Transaction{}, errors.New("raw string cannot be empty or only whitespace")
+	}
+
 	segments := strings.Split(raw, ",")
 	actualSegments := len(segments)
 	if actualSegments != expectedSegments {
-		errtext := fmt.Sprintf("Expected %v items in raw string but found %v", expectedSegments, actualSegments)
+		errtext := fmt.Sprintf("Expected %v items in raw transaction string but found %v. Raw string: %v", expectedSegments, actualSegments, raw)
 		return Transaction{}, errors.New(errtext)
 	}
 
