@@ -16,6 +16,7 @@ func ParseDate(dateString string) (string, error) {
 
 func ParseFloat64(floatString string) (float64, error) {
 	floatString = strings.TrimSpace(floatString)
+	floatString = strings.Trim(floatString, "\"")
 
 	amount, err := strconv.ParseFloat(floatString, 64)
 	if err != nil {
@@ -27,7 +28,9 @@ func ParseFloat64(floatString string) (float64, error) {
 }
 
 func ParseString(input string) (string, error) {
-	return strings.TrimSpace(input), nil
+	input = strings.TrimSpace(input)
+	input = strings.Trim(input, "\"")
+	return input, nil
 }
 
 func ParseStringSlice(input string, sep string) []string {
