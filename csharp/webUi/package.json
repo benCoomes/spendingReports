@@ -18,7 +18,7 @@
     "aurelia-testing": "^1.0.0",
     "gulp": "^4.0.2",
     "gulp-eslint": "^6.0.0",
-    "minimatch": "^3.0.4",
+    "minimatch": "^3.0.5",
     "promise-polyfill": "^8.2.0",
     "@babel/plugin-proposal-decorators": "^7.12.12",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
